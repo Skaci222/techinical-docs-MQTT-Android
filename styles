@@ -1,0 +1,59 @@
+html{
+  box-sizing: border-box;
+  font-family: sans-serif;
+  
+}
+
+body{
+  display: flex;
+  flex-direction: ;
+  padding: 20px;
+
+  
+}
+
+header{
+  font-size: 30px;
+}
+
+#navbar{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  margin: 10px 70px 0 10px;
+  border: 1px solid;
+
+}
+
+#navbar header{
+  padding: 20px;
+  width: 200px;
+}
+
+.nav-link{
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  border-top: 1px solid;
+  padding: 20px;
+}
+
+.main-section{
+  width: 700px;
+  margin: 10px 350px;
+  
+  
+}
+
+.code{
+  background-color: rgb(240, 255, 255);
+  padding: 10px;
+  margin-top: 10px;
+}
+
+@media (max-width: 1100px) and (min-width: 600px){
+  .main-section{
+    width: 700px;
+  }
+}
