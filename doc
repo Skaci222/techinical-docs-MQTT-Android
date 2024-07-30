@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial scale=1.0'>
+    <title>Technical Documentation Page</title>
+    <link href="./styles.css" rel="stylesheet">
+    </head>
+    <body>
+      <main id="main-doc">
+        <section class="main-section"  id="adding_dependencies">
+          <header>
+            Adding Dependencies
+            </header>
+            <p>Before leveraging the power of MQTT for Android, you must first add the dependency to your project</p>
+            <p>Add the Eclipse Maven repository to your build.gradle file and then add the Paho dependency to the dependencies section.</p>
+            <div class="code">
+             <code>
+               repositories {
+    <br><br>maven {
+        <br><br>url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
+ <br><br>}
+}
+
+
+<br><br>dependencies {
+    <br><br>compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+   <br><br>compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+}
+              </code>
+              </div>
+          </section>
+          <section class="main-section" id="connect_to_broker">
+            <header>
+              Connect to Broker
+            </header>
+            <p>Ensure your AndroidManifest.xml file includes the necessary permissions for internet access, as MQTT communication happens over the internet.</p>
+            <p>In your Android code, establish a connection to the MQTT broker by specifying certain parameters:</p>
+            <li>Broker URL</li>
+            <li>Broker port</li>
+            <li>Authentication cresentials</li>
+            <div class="code">
+             <code>
+              
+              // Create MQTT client
+        <br><br>mqttAndroidClient = new MqttAndroidClient(getApplicationContext(), MQTT_BROKER_URI, CLIENT_ID);
+
+        <br><br>// Set MQTT connection options
+        <br><br>MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setAutomaticReconnect(true);
+        </code>
+        <code>
+        <br><br>// Connect to the MQTT broker
+        <br><br>mqttAndroidClient.connect(mqttConnectOptions, new IMqttActionListener() {</br>
+            
+            <br><br>@Override
+            public void onSuccess(IMqttToken asyncActionToken) {
+                <br><br>// Connection Success
+                
+            }
+
+            <br>@Override</br>
+            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                <br>exception.printStackTrace();</br>
+            }
+        });
+              </code>
+              </div>
+          </section>
+          <section class="main-section" id="mqtt_topics">
+            <header>
+              MQTT Topics
+            </header>
+            <p>A topic is the way in which devices communicate with eachother. The publishing topic sends the packet containing the message to the broker which then directs the packet to all devices subscribed to that topic.</p>
+            <p> In MQTT, Topic refers to a UTF-8 string that filters messages for a connected client. A topic consists of one or more levels separated by a forward slash (topic level separator). Here are some examples:</p>
+             <ul>
+               <li>myhome/groundfloor/livingroom/temperature: This topic represents the temperature in the living room of a home located on the ground floor.</li>
+               <li>Germany/Bavaria/car/2382340923453/latitude: This topic structure could be utilized to share the latitude coordinates of a particular car in the region of Bavaria, Germany.</li>
+               <li>USA/California/San Francisco/Silicon Valley: This topic hierarchy can track or exchange information about events or data related to the Silicon Valley area in San Francisco, California, within the United States.</li>
+               </ul>
+          </section>
+          <section class="main-section" id="publish">
+            <header>
+              Publish
+            </header>
+            <p>In MQTT, a client can publish messages immediately when it connects to a broker. The messages are filtered based on topics, and each message must contain a topic that the broker can use to forward the message to interested clients.</p>
+            <p>The payload of each message includes the data to transmit in byte format, and the sending client can choose to send any type of data, including text, numbers, images, binary data, and even full-fledged XML or JSON.</p>
+             <div class="code">
+             <code >
+               private void publishMessage(String message, String topic) {
+        <br><br>try {</br>
+           <br><br> MqttMessage mqttMessage = new MqttMessage();
+           <br><br> mqttMessage.setPayload(message.getBytes());</br>
+            <br><br>mqttAndroidClient.publish(topic, mqttMessage);</br>
+        <br><br>} catch (Exception ex) {
+           <br><br> ex.printStackTrace(); } }
+    
+              </code>
+              </div>
+          </section>
+          <section class="main-section" id="subscribe">
+            <header>
+              Subscribe
+            </header>
+            <p>Publishing a message doesn’t make sense if no one ever receives it. This is where subscribing comes into play. Once a client publishes a message to an MQTT broker, the message must be delivered to interested clients.</p>
+            <p>Clients that want to receive messages on topics of interest send a SUBSCRIBE message to the broker. The SUBSCRIBE message is simple and contains a unique packet identifier and a list of subscriptions.</p>
+            <div class='code'>
+            <code>
+              private void subscribeToTopic() {
+       <br><br> try {
+            <br><br>mqttAndroidClient.subscribe("topic/example", 0, null, new IMqttActionListener() {
+                <br><br>@Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    <br><br>Log.d(TAG, "Subscribed to topic!");
+                <br><br>}
+
+                <br><br>@Override
+                <br><br>public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    <br><br>Log.d(TAG, "Failed to subscribe to topic: " + exception.getMessage());
+                <r><br>}
+           <br><br> });
+        <br><br>} catch (Exception e) {
+          <br><br>  e.printStackTrace();
+        }
+    }
+              </code>
+              </div>
+          </section>
+        </main>
+        <div>
+        <nav id="navbar">
+          <header>
+            MQTT for Android
+            </header>
+            <a class="nav-link" href="#adding_dependencies">Adding Dependencies</a>
+            <a class="nav-link" href="#connect_to_broker">Connect to Broker</a>
+            <a class="nav-link" href="#mqtt_topics">MQTT Topics</a>
+            <a class="nav-link" href="#publish">Publish</a>
+            <a class="nav-link" href="#subscribe">Subscribe</a>
+          </nav>
+          </div>
+      </body>
+  </html>
